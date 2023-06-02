@@ -3,41 +3,41 @@ import app
 
 class FlaskTest(unittest.TestCase):
 
-    # Ensure that Flask was set up correctly
+    
     def test_index(self):
         tester = app.app.test_client(self)
         response = tester.get('/')
         self.assertEqual(response.status_code, 200)
 
-    # Ensure that login page loads correctly
+    
     def test_login_page_loads(self):
         tester = app.app.test_client(self)
         response = tester.get('/login', follow_redirects=True)
         self.assertIn(b'Login', response.data)
 
-    # Ensure login behaves correctly with correct credentials
+   
     def test_correct_login(self):
         tester = app.app.test_client(self)
         response = tester.post('/login', data=dict(username='testuser', password='testpass'), follow_redirects=True)
         self.assertIn(b'Welcome to the home page!', response.data)
 
-    # Ensure login behaves correctly with incorrect credentials
+    
     def test_incorrect_login(self):
         tester = app.app.test_client(self)
         response = tester.post('/login', data=dict(username='wronguser', password='wrongpass'), follow_redirects=True)
         self.assertIn(b'Invalid username or password', response.data)
 
-    # Ensure that home page requires login
+    
     def test_home_requires_login(self):
         tester = app.app.test_client(self)
         response = tester.get('/home', follow_redirects=True)
         self.assertIn(b'Login', response.data)
 
-    # Ensure that users are loaded from file correctly
+    
     def test_users_loaded_from_file(self):
         self.assertEqual(app.users['testuser'], 'testpass')
 
-    # Ensure that users are saved to file correctly
+    
     def test_users_saved_to_file(self):
         app.users['newuser'] = 'newpass'
         app.save_users()
